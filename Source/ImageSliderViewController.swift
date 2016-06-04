@@ -2,12 +2,12 @@ import UIKit
 
 public class ImageSliderViewController: UIViewController, UIScrollViewDelegate, ImageSliderCellDelegate {
 
-    private var currentIndex: Int
-    private let imageCount: Int
-    private let imageUrls: [String]
+    public var currentIndex: Int
+    public let imageUrls: [String]
+    public let imageCount: Int
 
-    private let displayLabel = UILabel()
-    private let scrollView = UIScrollView()
+    public let displayLabel = UILabel()
+    public let scrollView = UIScrollView()
 
     public init(currentIndex: Int, imageUrls: [String]) {
         self.currentIndex = currentIndex
@@ -95,7 +95,7 @@ public class ImageSliderViewController: UIViewController, UIScrollViewDelegate, 
         dismissViewControllerAnimated(true, completion: nil)
     }
 
-    func switchImage(index: Int) {
+    public func switchImage(index: Int) {
         let sliderCell = scrollView.subviews[index] as! ImageSliderCell
         sliderCell.loadImage()
         currentIndex = index
