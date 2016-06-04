@@ -101,5 +101,4 @@ public class ImageSliderViewController: UIViewController, UIScrollViewDelegate, 
         currentIndex = index
         displayLabel.text = "\(currentIndex + 1) / \(imageCount)"
     }
-
 }
