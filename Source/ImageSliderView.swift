@@ -72,7 +72,7 @@ class ImageSliderView: UIView, UIScrollViewDelegate, ImageSliderCellDelegate {
         switchImage(currentIndex)
     }
 
-    public func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(scrollView: UIScrollView) {
         if (isUpdatingCellFrames) {
             isUpdatingCellFrames = false
             return
@@ -85,7 +85,7 @@ class ImageSliderView: UIView, UIScrollViewDelegate, ImageSliderCellDelegate {
         }
     }
 
-    public func switchImage(index: Int) {
+    func switchImage(index: Int) {
         let sliderCell = sliderCells[index]
         sliderCell.loadImage()
         currentIndex = index
