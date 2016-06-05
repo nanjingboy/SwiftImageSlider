@@ -5,10 +5,20 @@ import Toast_Swift
 class ImageSliderCell: UIView, UIScrollViewDelegate {
 
     var delegate: ImageSliderCellDelegate?
+    let imageUrl: String
 
-    private let imageUrl: String
     private let imageView = UIImageView()
     private let scrollView = UIScrollView()
+
+    override var frame: CGRect {
+        didSet {
+            if !CGRectEqualToRect(frame, CGRectZero) {
+                scrollView.frame = bounds
+                resetZoomScale()
+                drawImage()
+            }
+        }
+    }
 
     init(imageUrl: String) {
         self.imageUrl = imageUrl
@@ -72,13 +82,13 @@ class ImageSliderCell: UIView, UIScrollViewDelegate {
     }
 
     func loadImage() {
-        if imageView.image != nil {
+        if let _ = imageView.image {
             return
         }
 
+        makeToastActivity(.Center)
         scrollView.frame = bounds
         resetZoomScale()
-        makeToastActivity(.Center)
         imageView.kf_setImageWithURL(NSURL(string: imageUrl)!,
                                      placeholderImage: nil,
                                      optionsInfo: nil,
@@ -113,21 +123,21 @@ class ImageSliderCell: UIView, UIScrollViewDelegate {
             var ratio: CGFloat
             let imageSize = imageView.image!.size
             var imageFrame = CGRectMake(0, 0, imageSize.width, imageSize.height)
-            if frame.size.width <= frame.size.height {
-                ratio = frame.size.width / imageFrame.size.width
-                imageFrame.size.width = frame.size.width
+            if scrollViewFrame.size.width <= scrollViewFrame.size.height {
+                ratio = scrollViewFrame.size.width / imageFrame.size.width
+                imageFrame.size.width = scrollViewFrame.size.width
                 imageFrame.size.height = imageFrame.size.height * ratio
             } else {
-                ratio = frame.size.height / imageFrame.size.height
+                ratio = scrollViewFrame.size.height / imageFrame.size.height
                 imageFrame.size.width = imageFrame.size.width * ratio
-                imageFrame.size.height = frame.size.height
+                imageFrame.size.height = scrollViewFrame.size.height
             }
             imageView.frame = imageFrame
             scrollView.contentSize = imageView.frame.size
             imageView.center = centerOfScrollView(scrollView)
-            let maxScale = max(frame.size.width / imageFrame.size.width, frame.size.height / imageFrame.size.height)
             scrollView.minimumZoomScale = 1.0
-            scrollView.maximumZoomScale = max(maxScale, 3.0)
+            scrollView.maximumZoomScale = max(scrollViewFrame.size.width / imageFrame.size.width,
+                                              scrollViewFrame.size.height / imageFrame.size.height)
             scrollView.zoomScale = 1.0
         }
         scrollView.contentOffset = CGPointZero

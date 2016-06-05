@@ -1,26 +1,20 @@
 import UIKit
 
-public class ImageSliderViewController: UIViewController, UIScrollViewDelegate, ImageSliderCellDelegate {
+public class ImageSliderViewController: UIViewController, ImageSliderViewDelegate {
 
-    public var currentIndex: Int
-    public let imageUrls: [String]
-    public let imageCount: Int
-
-    public let displayLabel = UILabel()
-    public let scrollView = UIScrollView()
+    let imageSliderView: ImageSliderView
+    let displayLabel = UILabel()
 
     public init(currentIndex: Int, imageUrls: [String]) {
-        self.currentIndex = currentIndex
-        self.imageUrls = imageUrls
-        self.imageCount = imageUrls.count
+        imageSliderView = ImageSliderView(currntIndex: currentIndex, imageUrls: imageUrls)
         super.init(nibName: nil, bundle: nil)
+        imageSliderViewImageSwitch(currentIndex, count: imageUrls.count, imageUrl: imageUrls[currentIndex])
     }
 
     public required init?(coder aDecoder: NSCoder) {
-        self.currentIndex = 0
-        self.imageUrls = []
-        self.imageCount = 0
+        imageSliderView = ImageSliderView(currntIndex: 0, imageUrls: [])
         super.init(coder: aDecoder)
+        imageSliderViewImageSwitch(0, count: 0, imageUrl: nil)
     }
 
     public override func viewDidLoad() {
@@ -28,41 +22,30 @@ public class ImageSliderViewController: UIViewController, UIScrollViewDelegate, 
         view.clipsToBounds = true
         view.backgroundColor = UIColor.blackColor()
 
-        scrollView.scrollsToTop = false
-        scrollView.pagingEnabled = true
-        scrollView.delegate = self
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.autoresizesSubviews = false
-        scrollView.autoresizingMask = UIViewAutoresizing.None
-        view.addSubview(scrollView)
+        imageSliderView.delegate = self
+        imageSliderView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(imageSliderView)
+        setImageSliderViewConstraints()
 
         displayLabel.translatesAutoresizingMaskIntoConstraints = false
         displayLabel.textColor = UIColor.whiteColor()
+
         view.addSubview(displayLabel)
         setDisplayLabelConstraints()
     }
 
-    public override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
+    public func setImageSliderViewConstraints() {
+        let imageSliderViewHConstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[imageSliderView]-0-|",
+                                                                                      options: [],
+                                                                                      metrics: nil,
+                                                                                      views: ["imageSliderView": imageSliderView])
+        view.addConstraints(imageSliderViewHConstraints)
 
-        let scrollViewframe = self.view.bounds
-        scrollView.frame = scrollViewframe
-        scrollView.contentSize = CGSizeMake(scrollViewframe.size.width * CGFloat(imageCount),
-                                            scrollViewframe.size.height * CGFloat(imageCount))
-        scrollView.contentOffset = CGPointMake(CGFloat(currentIndex) * scrollViewframe.size.width, 0)
-        let scrollViewBounds = scrollView.bounds
-        for index in 0 ..< imageCount {
-            let sliderCell = ImageSliderCell(imageUrl: imageUrls[index])
-            sliderCell.frame = CGRectMake(CGRectGetWidth(scrollViewBounds) * CGFloat(index),
-                                          CGRectGetMinY(scrollViewBounds),
-                                          CGRectGetWidth(scrollViewBounds),
-                                          CGRectGetHeight(scrollViewBounds))
-            sliderCell.delegate = self
-            scrollView.addSubview(sliderCell)
-        }
-
-        switchImage(currentIndex)
+        let imageSliderViewVConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-0-[imageSliderView]-0-|",
+                                                                                      options: [],
+                                                                                      metrics: nil,
+                                                                                      views: ["imageSliderView": imageSliderView])
+        view.addConstraints(imageSliderViewVConstraints)
     }
 
     public func setDisplayLabelConstraints() {
@@ -82,23 +65,11 @@ public class ImageSliderViewController: UIViewController, UIScrollViewDelegate, 
         view.addConstraints(displayLabelVConstraints)
     }
 
-    public func scrollViewDidScroll(scrollView: UIScrollView) {
-        self.scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x, 0)
-        let width = CGRectGetWidth(self.scrollView.frame);
-        let index = Int(floor((self.scrollView.contentOffset.x - width / 2) / width) + 1)
-        if (currentIndex != index) {
-            switchImage(index)
-        }
-    }
-
-    public func imageSliderCellSingleTap(tap: UITapGestureRecognizer) {
+    public func imageSliderViewSingleTap(tap: UITapGestureRecognizer) {
         dismissViewControllerAnimated(true, completion: nil)
     }
 
-    public func switchImage(index: Int) {
-        let sliderCell = scrollView.subviews[index] as! ImageSliderCell
-        sliderCell.loadImage()
-        currentIndex = index
-        displayLabel.text = "\(currentIndex + 1) / \(imageCount)"
+    public func imageSliderViewImageSwitch(index: Int, count: Int, imageUrl: String?) {
+        displayLabel.text = "\(index + 1) / \(count)"
     }
 }
