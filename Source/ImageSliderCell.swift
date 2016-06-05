@@ -98,7 +98,7 @@ class ImageSliderCell: UIView, UIScrollViewDelegate {
                                         if image == nil || error != nil {
                                             var style = ToastStyle()
                                             style.messageAlignment = NSTextAlignment.Center
-                                            self.makeToast("Failed to load the image", duration: 2, position: .Center, style: style)
+                                            self.makeToast(ImageSliderUtility.localizedString("Failed to load the image"), duration: 2, position: .Center, style: style)
                                         } else {
                                             self.drawImage()
                                         }
