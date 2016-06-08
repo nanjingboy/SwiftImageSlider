@@ -120,24 +120,13 @@ class ImageSliderCell: UIView, UIScrollViewDelegate {
             scrollView.contentSize = imageView.frame.size
             resetZoomScale()
         } else {
-            var ratio: CGFloat
             let imageSize = imageView.image!.size
-            var imageFrame = CGRectMake(0, 0, imageSize.width, imageSize.height)
-            if scrollViewFrame.size.width <= scrollViewFrame.size.height {
-                ratio = scrollViewFrame.size.width / imageFrame.size.width
-                imageFrame.size.width = scrollViewFrame.size.width
-                imageFrame.size.height = imageFrame.size.height * ratio
-            } else {
-                ratio = scrollViewFrame.size.height / imageFrame.size.height
-                imageFrame.size.width = imageFrame.size.width * ratio
-                imageFrame.size.height = scrollViewFrame.size.height
-            }
-            imageView.frame = imageFrame
+            let ratio = scrollViewFrame.size.width / imageSize.width
+            imageView.frame = CGRect(x: 0, y: 0, width: scrollViewFrame.size.width, height: imageSize.height * ratio)
             scrollView.contentSize = imageView.frame.size
             imageView.center = centerOfScrollView(scrollView)
             scrollView.minimumZoomScale = 1.0
-            scrollView.maximumZoomScale = max(scrollViewFrame.size.width / imageFrame.size.width,
-                                              scrollViewFrame.size.height / imageFrame.size.height)
+            scrollView.maximumZoomScale = scrollViewFrame.height / imageView.frame.size.height
             scrollView.zoomScale = 1.0
         }
         scrollView.contentOffset = CGPointZero
