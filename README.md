@@ -11,7 +11,7 @@ A simple image slide show library by Swift.
 
 ```ruby
 platform :ios, '8.0'
-pod 'SwiftImageSlider', '~> 0.1.0'
+pod 'SwiftImageSlider', '~> 0.1.3'
 ```
 
 #### [Example](Example/Example/ViewController.swift)
