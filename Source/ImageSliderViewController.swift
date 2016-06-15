@@ -2,8 +2,8 @@ import UIKit
 
 public class ImageSliderViewController: UIViewController, ImageSliderViewDelegate {
 
-    let imageSliderView: ImageSliderView
-    let displayLabel = UILabel()
+    public let imageSliderView: ImageSliderView
+    public let displayLabel = UILabel()
 
     public init(currentIndex: Int, imageUrls: [String]) {
         imageSliderView = ImageSliderView(currntIndex: currentIndex, imageUrls: imageUrls)

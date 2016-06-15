@@ -1,6 +1,6 @@
 import UIKit
 
-class ImageSliderView: UIView, UIScrollViewDelegate, ImageSliderCellDelegate {
+public class ImageSliderView: UIView, UIScrollViewDelegate, ImageSliderCellDelegate {
 
     var delegate: ImageSliderViewDelegate?
 
@@ -10,19 +10,19 @@ class ImageSliderView: UIView, UIScrollViewDelegate, ImageSliderCellDelegate {
     private var sliderCells: [ImageSliderCell] = []
     private var isUpdatingCellFrames = false
 
-    override var bounds: CGRect {
+    public override var bounds: CGRect {
         didSet {
             updateCellFrames()
         }
     }
 
-    init(currntIndex: Int, imageUrls: [String]) {
+    public init(currntIndex: Int, imageUrls: [String]) {
         self.currentIndex = currntIndex
         super.init(frame: CGRectZero)
         initialize(imageUrls)
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         self.currentIndex = 0
         super.init(coder: aDecoder)
         initialize([])
@@ -72,7 +72,7 @@ class ImageSliderView: UIView, UIScrollViewDelegate, ImageSliderCellDelegate {
         switchImage(currentIndex)
     }
 
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    public func scrollViewDidScroll(scrollView: UIScrollView) {
         if (isUpdatingCellFrames) {
             isUpdatingCellFrames = false
             return
@@ -85,7 +85,7 @@ class ImageSliderView: UIView, UIScrollViewDelegate, ImageSliderCellDelegate {
         }
     }
 
-    func switchImage(index: Int) {
+    public func switchImage(index: Int) {
         let sliderCell = sliderCells[index]
         sliderCell.loadImage()
         currentIndex = index
