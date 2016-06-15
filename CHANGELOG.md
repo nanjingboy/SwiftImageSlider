@@ -1,3 +1,6 @@
+## 0.1.6 2016-06-15
+* Set access level to public for ImageSliderView#scrollView & ImageSliderView#delegate
+
 ## 0.1.5 2016-06-15
 * Set access level to public for ImageSliderViewController#imageSliderView & ImageSliderViewController#displayLabel
 
