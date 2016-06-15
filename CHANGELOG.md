@@ -1,3 +1,6 @@
+## 0.1.5 2016-06-15
+* Set access level to public for ImageSliderViewController#imageSliderView & ImageSliderViewController#displayLabel
+
 ## 0.1.3 2016-06-08
 * Let image fix scroll view width all time
 
