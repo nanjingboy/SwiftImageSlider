@@ -2,13 +2,12 @@ import UIKit
 
 public class ImageSliderView: UIView, UIScrollViewDelegate, ImageSliderCellDelegate {
 
-    var delegate: ImageSliderViewDelegate?
-
     private var currentIndex: Int
-
-    private let scrollView = UIScrollView()
     private var sliderCells: [ImageSliderCell] = []
     private var isUpdatingCellFrames = false
+
+    public var delegate: ImageSliderViewDelegate?
+    public let scrollView = UIScrollView()
 
     public override var bounds: CGRect {
         didSet {
@@ -26,6 +25,19 @@ public class ImageSliderView: UIView, UIScrollViewDelegate, ImageSliderCellDeleg
         self.currentIndex = 0
         super.init(coder: aDecoder)
         initialize([])
+    }
+
+    public func scrollViewDidScroll(scrollView: UIScrollView) {
+        if (isUpdatingCellFrames) {
+            isUpdatingCellFrames = false
+            return
+        }
+        self.scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x, 0)
+        let width = CGRectGetWidth(self.scrollView.frame)
+        let index = Int(floor((self.scrollView.contentOffset.x - width / 2) / width) + 1)
+        if (currentIndex != index) {
+            switchImage(index)
+        }
     }
 
     func initialize(imageUrls: [String]) {
@@ -72,20 +84,7 @@ public class ImageSliderView: UIView, UIScrollViewDelegate, ImageSliderCellDeleg
         switchImage(currentIndex)
     }
 
-    public func scrollViewDidScroll(scrollView: UIScrollView) {
-        if (isUpdatingCellFrames) {
-            isUpdatingCellFrames = false
-            return
-        }
-        self.scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x, 0)
-        let width = CGRectGetWidth(self.scrollView.frame)
-        let index = Int(floor((self.scrollView.contentOffset.x - width / 2) / width) + 1)
-        if (currentIndex != index) {
-            switchImage(index)
-        }
-    }
-
-    public func switchImage(index: Int) {
+    func switchImage(index: Int) {
         let sliderCell = sliderCells[index]
         sliderCell.loadImage()
         currentIndex = index

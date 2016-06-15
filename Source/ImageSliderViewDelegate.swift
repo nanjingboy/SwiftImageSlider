@@ -1,6 +1,6 @@
 import UIKit
 
-protocol ImageSliderViewDelegate {
+public protocol ImageSliderViewDelegate {
 
     func imageSliderViewSingleTap(tap: UITapGestureRecognizer)
 
