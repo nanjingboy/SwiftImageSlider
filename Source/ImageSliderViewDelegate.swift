@@ -2,7 +2,7 @@ import UIKit
 
 public protocol ImageSliderViewDelegate {
 
-    func imageSliderViewSingleTap(tap: UITapGestureRecognizer)
+    func imageSliderViewSingleTap(_ tap: UITapGestureRecognizer)
 
-    func imageSliderViewImageSwitch(index: Int, count: Int, imageUrl: String?)
+    func imageSliderViewImageSwitch(_ index: Int, count: Int, imageUrl: String?)
 }
