@@ -3,7 +3,7 @@ import UIKit
 open class ImageSliderViewController: UIViewController, ImageSliderViewDelegate {
 
     open let imageSliderView: ImageSliderView
-    open let displayLabel = UILabel()
+    open let pageControl = UIPageControl()
 
     public init(currentIndex: Int, imageUrls: [String]) {
         imageSliderView = ImageSliderView(currntIndex: currentIndex, imageUrls: imageUrls)
@@ -27,10 +27,9 @@ open class ImageSliderViewController: UIViewController, ImageSliderViewDelegate 
         view.addSubview(imageSliderView)
         setImageSliderViewConstraints()
 
-        displayLabel.translatesAutoresizingMaskIntoConstraints = false
-        displayLabel.textColor = UIColor.white
+        pageControl.translatesAutoresizingMaskIntoConstraints = false
 
-        view.addSubview(displayLabel)
+        view.addSubview(pageControl)
         setDisplayLabelConstraints()
     }
 
@@ -49,7 +48,7 @@ open class ImageSliderViewController: UIViewController, ImageSliderViewDelegate 
     }
 
     open func setDisplayLabelConstraints() {
-        let constraint = NSLayoutConstraint(item: displayLabel,
+        let constraint = NSLayoutConstraint(item: pageControl,
                                             attribute: NSLayoutAttribute.centerX,
                                             relatedBy: NSLayoutRelation.equal,
                                             toItem: view,
@@ -58,10 +57,10 @@ open class ImageSliderViewController: UIViewController, ImageSliderViewDelegate 
                                             constant: 0.0)
         view.addConstraint(constraint)
 
-        let displayLabelVConstraints = NSLayoutConstraint.constraints(withVisualFormat: "V:[label]-20-|",
+        let displayLabelVConstraints = NSLayoutConstraint.constraints(withVisualFormat: "V:[pageControl]-20-|",
                                                                                       options: [],
                                                                                       metrics: nil,
-                                                                                      views: ["label": displayLabel])
+                                                                                      views: ["pageControl": pageControl])
         view.addConstraints(displayLabelVConstraints)
     }
 
@@ -70,6 +69,7 @@ open class ImageSliderViewController: UIViewController, ImageSliderViewDelegate 
     }
 
     open func imageSliderViewImageSwitch(_ index: Int, count: Int, imageUrl: String?) {
-        displayLabel.text = "\(index + 1) / \(count)"
+        pageControl.numberOfPages = count
+        pageControl.currentPage = index
     }
 }
