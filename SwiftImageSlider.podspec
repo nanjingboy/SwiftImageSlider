@@ -9,6 +9,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '8.0'
   s.source_files = "Source/*.swift"
   s.resources    = 'SwiftImageSlider.bundle'
-  s.dependency "Kingfisher", "~> 2.4"
-  s.dependency "Toast-Swift", "~> 1.3.0"
+  s.dependency "Kingfisher", "~> 3.2"
+  s.dependency "Toast-Swift", "~> 2.0"
 end
