@@ -1,15 +1,15 @@
 import UIKit
 
-public class ImageSliderView: UIView, UIScrollViewDelegate, ImageSliderCellDelegate {
+open class ImageSliderView: UIView, UIScrollViewDelegate, ImageSliderCellDelegate {
 
-    private var currentIndex: Int
-    private var sliderCells: [ImageSliderCell] = []
-    private var isUpdatingCellFrames = false
+    fileprivate var currentIndex: Int
+    fileprivate var sliderCells: [ImageSliderCell] = []
+    fileprivate var isUpdatingCellFrames = false
 
-    public var delegate: ImageSliderViewDelegate?
-    public let scrollView = UIScrollView()
+    open var delegate: ImageSliderViewDelegate?
+    open let scrollView = UIScrollView()
 
-    public override var bounds: CGRect {
+    open override var bounds: CGRect {
         didSet {
             updateCellFrames()
         }
@@ -17,7 +17,7 @@ public class ImageSliderView: UIView, UIScrollViewDelegate, ImageSliderCellDeleg
 
     public init(currntIndex: Int, imageUrls: [String]) {
         self.currentIndex = currntIndex
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
         initialize(imageUrls)
     }
 
@@ -27,29 +27,29 @@ public class ImageSliderView: UIView, UIScrollViewDelegate, ImageSliderCellDeleg
         initialize([])
     }
 
-    public func scrollViewDidScroll(scrollView: UIScrollView) {
+    open func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if (isUpdatingCellFrames) {
             isUpdatingCellFrames = false
             return
         }
-        self.scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x, 0)
-        let width = CGRectGetWidth(self.scrollView.frame)
+        self.scrollView.contentOffset = CGPoint(x: scrollView.contentOffset.x, y: 0)
+        let width = self.scrollView.frame.width
         let index = Int(floor((self.scrollView.contentOffset.x - width / 2) / width) + 1)
         if (currentIndex != index) {
             switchImage(index)
         }
     }
 
-    func initialize(imageUrls: [String]) {
+    func initialize(_ imageUrls: [String]) {
         clipsToBounds = false
 
         scrollView.scrollsToTop = false
-        scrollView.pagingEnabled = true
+        scrollView.isPagingEnabled = true
         scrollView.delegate = self
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.autoresizesSubviews = false
-        scrollView.autoresizingMask = UIViewAutoresizing.None
+        scrollView.autoresizingMask = UIViewAutoresizing()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
 
         for imageUrl in imageUrls {
@@ -68,30 +68,30 @@ public class ImageSliderView: UIView, UIScrollViewDelegate, ImageSliderCellDeleg
 
         isUpdatingCellFrames = true
         scrollView.frame = sliderViewFrame
-        scrollView.contentSize = CGSizeMake(sliderViewFrame.size.width * CGFloat(pageCount),
-                                            sliderViewFrame.size.height * CGFloat(pageCount))
+        scrollView.contentSize = CGSize(width: sliderViewFrame.size.width * CGFloat(pageCount),
+                                            height: sliderViewFrame.size.height * CGFloat(pageCount))
 
-        scrollView.contentOffset = CGPointMake(CGFloat(currentIndex) * sliderViewFrame.size.width, 0)
+        scrollView.contentOffset = CGPoint(x: CGFloat(currentIndex) * sliderViewFrame.size.width, y: 0)
         let scrollViewBounds = scrollView.bounds
         for index in 0 ..< pageCount {
             let sliderCell = sliderCells[index]
-            sliderCell.frame = CGRectMake(CGRectGetWidth(scrollViewBounds) * CGFloat(index),
-                                          CGRectGetMinY(scrollViewBounds),
-                                          CGRectGetWidth(scrollViewBounds),
-                                          CGRectGetHeight(scrollViewBounds))
+            sliderCell.frame = CGRect(x: scrollViewBounds.width * CGFloat(index),
+                                          y: scrollViewBounds.minY,
+                                          width: scrollViewBounds.width,
+                                          height: scrollViewBounds.height)
         }
 
         switchImage(currentIndex)
     }
 
-    func switchImage(index: Int) {
+    func switchImage(_ index: Int) {
         let sliderCell = sliderCells[index]
         sliderCell.loadImage()
         currentIndex = index
         delegate?.imageSliderViewImageSwitch(index, count: sliderCells.count, imageUrl: sliderCell.imageUrl)
     }
 
-    func imageSliderCellSingleTap(tap: UITapGestureRecognizer) {
+    func imageSliderCellSingleTap(_ tap: UITapGestureRecognizer) {
         delegate?.imageSliderViewSingleTap(tap)
     }
 }
