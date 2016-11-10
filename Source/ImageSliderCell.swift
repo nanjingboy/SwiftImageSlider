@@ -7,12 +7,12 @@ class ImageSliderCell: UIView, UIScrollViewDelegate {
     var delegate: ImageSliderCellDelegate?
     let imageUrl: String
 
-    private let imageView = UIImageView()
-    private let scrollView = UIScrollView()
+    fileprivate let imageView = UIImageView()
+    fileprivate let scrollView = UIScrollView()
 
     override var frame: CGRect {
         didSet {
-            if !CGRectEqualToRect(frame, CGRectZero) {
+            if !frame.equalTo(CGRect.zero) {
                 scrollView.frame = bounds
                 resetZoomScale()
                 drawImage()
@@ -22,7 +22,7 @@ class ImageSliderCell: UIView, UIScrollViewDelegate {
 
     init(imageUrl: String) {
         self.imageUrl = imageUrl
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
         initialize()
     }
 
@@ -33,7 +33,7 @@ class ImageSliderCell: UIView, UIScrollViewDelegate {
     }
 
     func initialize() {
-        imageView.contentMode = UIViewContentMode.ScaleAspectFit
+        imageView.contentMode = UIViewContentMode.scaleAspectFit
 
         scrollView.clipsToBounds = true
         scrollView.delegate = self
@@ -50,35 +50,35 @@ class ImageSliderCell: UIView, UIScrollViewDelegate {
 
         let singleTap = UITapGestureRecognizer(target: self, action: #selector(imageSliderCellSingleTap))
         singleTap.numberOfTapsRequired = 1
-        singleTap.requireGestureRecognizerToFail(doubleTap)
+        singleTap.require(toFail: doubleTap)
         scrollView.addGestureRecognizer(singleTap)
     }
 
-    func imageSliderCellDoubleTap(tap: UITapGestureRecognizer) {
-        let touchPoint = tap.locationInView(self)
+    func imageSliderCellDoubleTap(_ tap: UITapGestureRecognizer) {
+        let touchPoint = tap.location(in: self)
         if (scrollView.zoomScale == scrollView.minimumZoomScale) {
-            scrollView.zoomToRect(CGRectMake(touchPoint.x, touchPoint.y, 1, 1), animated: true)
+            scrollView.zoom(to: CGRect(x: touchPoint.x, y: touchPoint.y, width: 1, height: 1), animated: true)
         } else {
             scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
         }
     }
 
-    func imageSliderCellSingleTap(tap: UITapGestureRecognizer) {
+    func imageSliderCellSingleTap(_ tap: UITapGestureRecognizer) {
         delegate?.imageSliderCellSingleTap(tap)
     }
 
-    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
 
-    func scrollViewDidZoom(scrollView: UIScrollView) {
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
         imageView.center = centerOfScrollView(scrollView)
     }
 
-    func scrollViewDidEndZooming(scrollView: UIScrollView, withView view: UIView?, atScale scale: CGFloat) {
-        UIView.animateWithDuration(0.25) {
+    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        UIView.animate(withDuration: 0.25, animations: {
             view?.center = self.centerOfScrollView(scrollView)
-        }
+        }) 
     }
 
     func loadImage() {
@@ -86,22 +86,22 @@ class ImageSliderCell: UIView, UIScrollViewDelegate {
             return
         }
 
-        makeToastActivity(.Center)
+        makeToastActivity(.center)
         scrollView.frame = bounds
         resetZoomScale()
-        imageView.kf_setImageWithURL(NSURL(string: imageUrl)!,
-                                     placeholderImage: nil,
-                                     optionsInfo: nil,
-                                     progressBlock: nil,
-                                     completionHandler: {(image, error, cacheType, imageURL) -> () in
-                                        self.hideToastActivity()
-                                        if image == nil || error != nil {
-                                            var style = ToastStyle()
-                                            style.messageAlignment = NSTextAlignment.Center
-                                            self.makeToast(ImageSliderUtility.localizedString("Failed to load the image"), duration: 2, position: .Center, style: style)
-                                        } else {
-                                            self.drawImage()
-                                        }
+        imageView.kf_setImage(with: URL(string: imageUrl)!,
+                              placeholder: nil,
+                              options: nil,
+                              progressBlock: nil,
+                              completionHandler: {(image, error, cacheType, imageURL) -> () in
+                                self.hideToastActivity()
+                                if image == nil || error != nil {
+                                    var style = ToastStyle()
+                                    style.messageAlignment = NSTextAlignment.center
+                                    self.makeToast(ImageSliderUtility.localizedString("Failed to load the image"), duration: 2, position: .center, style: style)
+                                } else {
+                                    self.drawImage()
+                                }
             }
         )
     }
@@ -115,7 +115,7 @@ class ImageSliderCell: UIView, UIScrollViewDelegate {
     func drawImage() {
         var scrollViewFrame = scrollView.frame
         if imageView.image == nil {
-            scrollViewFrame.origin = CGPointZero
+            scrollViewFrame.origin = CGPoint.zero
             imageView.frame = scrollViewFrame
             scrollView.contentSize = imageView.frame.size
             resetZoomScale()
@@ -129,10 +129,10 @@ class ImageSliderCell: UIView, UIScrollViewDelegate {
             scrollView.maximumZoomScale = scrollViewFrame.height / imageView.frame.size.height
             scrollView.zoomScale = 1.0
         }
-        scrollView.contentOffset = CGPointZero
+        scrollView.contentOffset = CGPoint.zero
     }
 
-    func centerOfScrollView(scrollView: UIScrollView) -> CGPoint {
+    func centerOfScrollView(_ scrollView: UIScrollView) -> CGPoint {
         var offsetX: CGFloat
         if scrollView.bounds.size.width > scrollView.bounds.size.height {
             offsetX = (scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5
@@ -147,7 +147,7 @@ class ImageSliderCell: UIView, UIScrollViewDelegate {
             offsetY = 0.0
         }
 
-        return CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
-                           scrollView.contentSize.height * 0.5 + offsetY)
+        return CGPoint(x: scrollView.contentSize.width * 0.5 + offsetX,
+                           y: scrollView.contentSize.height * 0.5 + offsetY)
     }
 }

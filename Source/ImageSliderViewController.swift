@@ -1,9 +1,9 @@
 import UIKit
 
-public class ImageSliderViewController: UIViewController, ImageSliderViewDelegate {
+open class ImageSliderViewController: UIViewController, ImageSliderViewDelegate {
 
-    public let imageSliderView: ImageSliderView
-    public let displayLabel = UILabel()
+    open let imageSliderView: ImageSliderView
+    open let pageControl = UIPageControl()
 
     public init(currentIndex: Int, imageUrls: [String]) {
         imageSliderView = ImageSliderView(currntIndex: currentIndex, imageUrls: imageUrls)
@@ -17,59 +17,59 @@ public class ImageSliderViewController: UIViewController, ImageSliderViewDelegat
         imageSliderViewImageSwitch(0, count: 0, imageUrl: nil)
     }
 
-    public override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         view.clipsToBounds = true
-        view.backgroundColor = UIColor.blackColor()
+        view.backgroundColor = UIColor.black
 
         imageSliderView.delegate = self
         imageSliderView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageSliderView)
         setImageSliderViewConstraints()
 
-        displayLabel.translatesAutoresizingMaskIntoConstraints = false
-        displayLabel.textColor = UIColor.whiteColor()
+        pageControl.translatesAutoresizingMaskIntoConstraints = false
 
-        view.addSubview(displayLabel)
+        view.addSubview(pageControl)
         setDisplayLabelConstraints()
     }
 
-    public func setImageSliderViewConstraints() {
-        let imageSliderViewHConstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[imageSliderView]-0-|",
+    open func setImageSliderViewConstraints() {
+        let imageSliderViewHConstraints = NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[imageSliderView]-0-|",
                                                                                       options: [],
                                                                                       metrics: nil,
                                                                                       views: ["imageSliderView": imageSliderView])
         view.addConstraints(imageSliderViewHConstraints)
 
-        let imageSliderViewVConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-0-[imageSliderView]-0-|",
+        let imageSliderViewVConstraints = NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[imageSliderView]-0-|",
                                                                                       options: [],
                                                                                       metrics: nil,
                                                                                       views: ["imageSliderView": imageSliderView])
         view.addConstraints(imageSliderViewVConstraints)
     }
 
-    public func setDisplayLabelConstraints() {
-        let constraint = NSLayoutConstraint(item: displayLabel,
-                                            attribute: NSLayoutAttribute.CenterX,
-                                            relatedBy: NSLayoutRelation.Equal,
+    open func setDisplayLabelConstraints() {
+        let constraint = NSLayoutConstraint(item: pageControl,
+                                            attribute: NSLayoutAttribute.centerX,
+                                            relatedBy: NSLayoutRelation.equal,
                                             toItem: view,
-                                            attribute: NSLayoutAttribute.CenterX,
+                                            attribute: NSLayoutAttribute.centerX,
                                             multiplier: 1.0,
                                             constant: 0.0)
         view.addConstraint(constraint)
 
-        let displayLabelVConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:[label]-20-|",
+        let displayLabelVConstraints = NSLayoutConstraint.constraints(withVisualFormat: "V:[pageControl]-20-|",
                                                                                       options: [],
                                                                                       metrics: nil,
-                                                                                      views: ["label": displayLabel])
+                                                                                      views: ["pageControl": pageControl])
         view.addConstraints(displayLabelVConstraints)
     }
 
-    public func imageSliderViewSingleTap(tap: UITapGestureRecognizer) {
-        dismissViewControllerAnimated(true, completion: nil)
+    open func imageSliderViewSingleTap(_ tap: UITapGestureRecognizer) {
+        dismiss(animated: true, completion: nil)
     }
 
-    public func imageSliderViewImageSwitch(index: Int, count: Int, imageUrl: String?) {
-        displayLabel.text = "\(index + 1) / \(count)"
+    open func imageSliderViewImageSwitch(_ index: Int, count: Int, imageUrl: String?) {
+        pageControl.numberOfPages = count
+        pageControl.currentPage = index
     }
 }

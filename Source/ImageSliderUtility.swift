@@ -1,9 +1,9 @@
 class ImageSliderUtility: NSObject {
 
-    static func localizedString(key: String) -> String {
-        if let bundleUrl = NSBundle(forClass: classForCoder()).URLForResource("SwiftImageSlider", withExtension: "bundle") {
-            if let bundle = NSBundle(URL: bundleUrl) {
-                return bundle.localizedStringForKey(key, value: key, table: "SwiftImageSlider")
+    static func localizedString(_ key: String) -> String {
+        if let bundleUrl = Bundle(for: classForCoder()).url(forResource: "SwiftImageSlider", withExtension: "bundle") {
+            if let bundle = Bundle(url: bundleUrl) {
+                return bundle.localizedString(forKey: key, value: key, table: "SwiftImageSlider")
             }
         }
 
