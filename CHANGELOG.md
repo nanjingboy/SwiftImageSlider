@@ -1,3 +1,6 @@
+## 0.2.0 2016-11-10
+* Migrate to swift 3.0
+
 ## 0.1.6 2016-06-15
 * Set access level to public for ImageSliderView#scrollView & ImageSliderView#delegate
 
