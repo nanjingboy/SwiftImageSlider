@@ -78,7 +78,7 @@ class ImageSliderCell: UIView, UIScrollViewDelegate {
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         UIView.animate(withDuration: 0.25, animations: {
             view?.center = self.centerOfScrollView(scrollView)
-        }) 
+        })
     }
 
     func loadImage() {
@@ -89,7 +89,7 @@ class ImageSliderCell: UIView, UIScrollViewDelegate {
         makeToastActivity(.center)
         scrollView.frame = bounds
         resetZoomScale()
-        imageView.kf_setImage(with: URL(string: imageUrl)!,
+        imageView.kf.setImage(with: URL(string: imageUrl)!,
                               placeholder: nil,
                               options: nil,
                               progressBlock: nil,
