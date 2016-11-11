@@ -1,3 +1,6 @@
+## 0.2.1 2016-11-11
+* Replace Kingfisher api with [Kingfisher3.0](https://github.com/onevcat/Kingfisher/wiki/Kingfisher-3.0-Migration-Guide)
+
 ## 0.2.0 2016-11-10
 * Migrate to swift 3.0
 
